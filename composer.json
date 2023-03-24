@@ -1,0 +1,22 @@
+{
+  "name": "sky/client",
+  "description": "Sky project client API and OAuth2",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Hansen Wong",
+      "email": "skyrockman17@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "type": "yii2-extension",
+  "require": {
+    "php": ">=7.4",
+    "yiisoft/yii2-httpclient": "~2.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "sky\\client\\": "src"
+    }
+  }
+}
