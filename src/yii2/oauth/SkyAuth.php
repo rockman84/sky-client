@@ -11,13 +11,13 @@ class SkyAuth extends OAuth2
 
     public $apiBaseUrl = 'https://api.iweb.my.id';
 
-    public $tokenUrl = 'https://api.iweb.my.id/account/auth/get-access-token';
+    public $tokenUrl = 'https://api.iweb.my.id/auth/get-access-token';
 
     public $authUrl = 'https://iweb.my.id/auth/oauth';
 
     public function initUserAttributes()
     {
-        return $this->api('account/me/identity', 'GET');
+        return $this->api('account/me/identity?expand=owner,profile', 'GET');
     }
 
     public function api($apiSubUrl, $method = 'GET', $data = [], $headers = [])
@@ -43,16 +43,16 @@ class SkyAuth extends OAuth2
 
     public function getState($key)
     {
-        return Yii::$app->cache->get($this->getStateKeyPrefix() . $key);
+        return Yii::$app->session->get($this->getStateKeyPrefix() . $key);
     }
 
     public function setState($key, $value)
     {
-        return Yii::$app->cache->set($this->getStateKeyPrefix() . $key, $value, 1300);
+        return Yii::$app->session->set($this->getStateKeyPrefix() . $key, $value, 1300);
     }
 
     public function removeState($key)
     {
-        return Yii::$app->cache->delete($this->getStateKeyPrefix() . $key);
+        return Yii::$app->session->delete($this->getStateKeyPrefix() . $key);
     }
 }
