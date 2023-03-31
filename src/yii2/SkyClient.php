@@ -6,12 +6,12 @@ use yii\httpclient\Client;
 class SkyClient extends Client
 {
     public $baseUrl = 'http://api.iweb.dev.id';
-    public $email;
-    public $user = [
-        'email' => 'admin@web.com',
-        'password' => 'admin123',
+    public $cred = [
+        'client_id' => null,
+        'client_secret' => null,
     ];
-    private $_token;
+
+    public $grant_type = 'client_credentials';
 
     public $sessionName = '__SKYclientJwT__';
 
@@ -23,7 +23,7 @@ class SkyClient extends Client
         'class' => Response::class,
     ];
 
-    public function createRequestPrivate($url, $method = 'get')
+    public function apiPrivate($url, $method = 'get')
     {
         if (!$this->getToken()) {
             $this->requestToken();
@@ -36,15 +36,15 @@ class SkyClient extends Client
             ->setMethod($method);
     }
 
-    public function requestToken()
+    public function getAccessToken()
     {
         $request = $this->createRequest()
             ->setMethod('post')
-            ->addData($this->user)
-            ->setUrl('account/auth/login')
+            ->addData(array_merge(['grant_type' => $this->grant_type ], $this->cred))
+            ->setUrl('auth/get-access-token')
             ->send();
         if ($request->isOk) {
-            $this->setToken($request->data['token']);
+            $this->setToken($request->data['access_token']);
         }
         return $request->statusCode;
     }
@@ -61,7 +61,7 @@ class SkyClient extends Client
 
     public function getIdentity($data = [])
     {
-        return $this->createRequestPrivate('account/me/identity')
+        return $this->apiPrivate('account/me/identity')
             ->setData($data)
             ->send();
     }
