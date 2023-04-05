@@ -48,11 +48,11 @@ class SkyAuth extends OAuth2
 
     public function setState($key, $value)
     {
-        return Yii::$app->session->set($this->getStateKeyPrefix() . $key, $value, 1300);
+        Yii::$app->session->set($this->getStateKeyPrefix() . $key, $value, 60 * 10);
     }
 
     public function removeState($key)
     {
-        return Yii::$app->session->delete($this->getStateKeyPrefix() . $key);
+        return Yii::$app->session->remove($this->getStateKeyPrefix() . $key);
     }
 }
